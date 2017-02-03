@@ -79,6 +79,11 @@ def tanggap(updates):
           p = terminal.Popen([command],stdout=terminal.PIPE,stderr=terminal.PIPE,stdin=terminal.PIPE)
           msg,error = p.communicate()
           send_message(msg,chat)
+      elif "benchmark" in text:
+          command = 'sysbench --num-thread=4 --test=cpu --cpu-max-prime=20000 --validate run'.split()
+          p = terminal.Popen([command],stdout=terminal.PIPE, stderr=terminal.PI$
+          msg,error = p.communicate();
+          send_message(msg,chat)
       else :
           send_message("echo "+text,chat)
        

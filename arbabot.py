@@ -1,10 +1,12 @@
 import json
 import requests
 import time
+from datetime import date
 import os
+from praytimes import PrayTimes
 import subprocess as terminal
 
-TOKEN="TOKENMU_DISINI_AMBIL_DARI_BOTFATHER"
+TOKEN="TOKEN_YANG_KAMU_DAPAT_DARI_BOTFATHER"
 URL = "https://api.telegram.org/bot{}/".format(TOKEN)
 def get_url(url):
    response = requests.get(url)
@@ -22,6 +24,15 @@ def get_updates(offset=None):
       url += "?offset={}".format(offset)
    js = get_json_from_url(url)
    return js
+
+def get_latlon(url):
+   data = get_json_from_url(url)
+   try:
+      lat = data['results'][0]['geometry']['location']['lat']
+      lng = data['results'][0]['geometry']['location']['lng']
+      return (lat, lng)
+   except IndexError:
+      return None
 
 def get_last_update_id(updates):
     update_ids = []
@@ -81,12 +92,20 @@ def tanggap(updates):
           send_message(msg,chat)
       elif "benchmark" in text:
           command = 'sysbench --num-threads=4 --test=cpu --cpu-max-prime=20000 --validate run'.split()
-          p = terminal.Popen(command,stdout=terminal.PIPE, stderr=terminal.PI$
+          p = terminal.Popen(command,stdout=terminal.PIPE, stderr=terminal.PIPE, stdin=terminal.PIPE)
           msg,error = p.communicate();
           send_message(msg,chat)
-      else :
-          send_message("echo "+text,chat)
-       
+      elif "sholat" in text:
+          textsplit = text.split(' ',1)
+          kota = textsplit[1];
+          urlkota = "https://maps.googleapis.com/maps/api/geocode/json?address={}".format(kota)
+          latdanlng = get_latlon(urlkota)
+          j = PrayTimes()
+          times = j.getTimes(date.today(), latdanlng , 7)
+          string_reply = "Jadwal Sholat untuk kota {} dalam wib \n".format(kota)
+          for u in ['Imsak','Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha']:
+              string_reply += (u + ': '+times[u.lower()])+'\n'
+          send_message(string_reply, chat) 
 
 def main():
     last_update_id = None

@@ -6,7 +6,7 @@ import os
 from praytimes import PrayTimes
 import subprocess as terminal
 
-TOKEN="TOKENMU_SENDIRI_DEH_BRO"
+TOKEN="277352148:AAFWB-Z-gScmCA4B2fJYen2ryMNQ_b5dXrE"
 URL = "https://api.telegram.org/bot{}/".format(TOKEN)
 def get_url(url):
    response = requests.get(url)

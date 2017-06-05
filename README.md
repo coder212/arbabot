@@ -10,3 +10,5 @@ sudo aptitude install python-pip
 kemudain melalui pip install requests library sebagai deps dari bot ini
 
 sudo pip install requests
+
+menggunakan praytimes dari https://www.praytimes.org/wiki/Code
